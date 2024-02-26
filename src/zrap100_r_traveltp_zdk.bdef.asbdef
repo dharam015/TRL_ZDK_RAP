@@ -1,0 +1,84 @@
+managed implementation in class ZRAP100_BP_TravelTP_ZDK unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZRAP100_R_TRAVELTP_ZDK alias Travel
+persistent table zrap100_atravzdk
+draft table zrap100_dtravzdk
+etag master LocalLastChangedAt
+lock master total etag LastChangedAt
+authorization master ( global )
+early numbering // intenral early numbering
+{
+  //below code commented to implement early numbering
+  //  field ( mandatory : create )
+  //   TravelID;
+
+  field ( readonly )
+  CreatedAt,
+  CreatedBy,
+  LastChangedAt,
+  LocalLastChangedAt,
+  LocalLastChangedBy;
+
+  field ( readonly )
+  TravelID;
+
+  //to make field mandatory
+  field ( mandatory )
+  CustomerID,
+  BeginDate,
+  EndDate;
+
+  create;
+  update;
+  delete;
+
+  //add determination to populate initial values on event create
+  determination setStatusToOpe on modify { create; }
+  determination setStartDate on modify { create; field BeginDate, EndDate; }
+  //  determination setDate on modify { create; }
+  determination setCurrency on modify { create; }
+
+  //add validation
+  validation validateCustomer on save { create; field CustomerID; }
+  validation validateDates on save { create; field BeginDate, EndDate; }
+
+  // add action without parameter
+  action deductDiscount parameter zrap100_a_travel_discount_zdk result [1] $self;
+  //define factory instance
+  factory action copyTravel [1];
+
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare
+  {
+    validation validateCustomer;
+    validation validateDates;
+  }
+
+  mapping for zrap100_atravzdk
+    {
+      TravelID           = travel_id;
+      AgencyID           = agency_id;
+      CustomerID         = customer_id;
+      BeginDate          = begin_date;
+      EndDate            = end_date;
+      BookingFee         = booking_fee;
+      TotalPrice         = total_price;
+      CurrencyCode       = currency_code;
+      Description        = description;
+      OverallStatus      = overall_status;
+      Attachment         = attachment;
+      MimeType           = mime_type;
+      FileName           = file_name;
+      CreatedBy          = created_by;
+      CreatedAt          = created_at;
+      LocalLastChangedBy = local_last_changed_by;
+      LocalLastChangedAt = local_last_changed_at;
+      LastChangedAt      = last_changed_at;
+    }
+}
