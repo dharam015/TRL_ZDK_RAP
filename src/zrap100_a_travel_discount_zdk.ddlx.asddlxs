@@ -1,6 +1,6 @@
 @Metadata.layer: #CORE
 annotate entity zrap100_a_travel_discount_zdk with
-{
+{   
   @UI: {
       defaultValue: '25'
   }

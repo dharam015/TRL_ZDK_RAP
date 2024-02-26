@@ -1,12 +1,12 @@
 @Metadata.layer: #CUSTOMER
-@UI: {
+@UI: {   
   headerInfo: {
     typeName: 'Travel',
     typeNamePlural: 'Travels',
     imageUrl: 'Attachment',  //case-sensitive
     description: { type: #STANDARD, value: 'TravelID' } //case-sensitive
   }
-}
+}  
 annotate view ZRAP100_C_TRAVELTP_ZDK with
 {
   @UI.facet: [ {
